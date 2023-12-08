@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "LDSwiftEventSource",
+    name: "LDSwiftEventSourceCustomized",
     platforms: [
         .iOS(.v11),
         .macOS(.v10_13),
@@ -11,12 +11,12 @@ let package = Package(
         .tvOS(.v11)
     ],
     products: [
-        .library(name: "LDSwiftEventSource", targets: ["LDSwiftEventSource"]),
+        .library(name: "LDSwiftEventSourceCustomized", targets: ["LDSwiftEventSourceCustomized"]),
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "LDSwiftEventSource",
+            name: "LDSwiftEventSourceCustomized",
             path: "Source"),
         .testTarget(
             name: "LDSwiftEventSourceTests",
