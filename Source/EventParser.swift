@@ -1,6 +1,6 @@
 import Foundation
 
-class EventParser {
+public class EventParser {
     private struct Constants {
         static let dataLabel: Substring = "data"
         static let idLabel: Substring = "id"
@@ -16,13 +16,13 @@ class EventParser {
     private var lastEventId: String
     private var currentRetry: TimeInterval
 
-    init(handler: EventHandler, initialEventId: String, initialRetry: TimeInterval) {
+    public init(handler: EventHandler, initialEventId: String, initialRetry: TimeInterval) {
         self.handler = handler
         self.lastEventId = initialEventId
         self.currentRetry = initialRetry
     }
 
-    func parse(line: String) {
+    public func parse(line: String) {
         let splitByColon = line.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false)
 
         switch (splitByColon[0], splitByColon[safe: 1]) {
@@ -35,9 +35,9 @@ class EventParser {
         }
     }
 
-    func getLastEventId() -> String { lastEventId }
+    public func getLastEventId() -> String { lastEventId }
 
-    func reset() -> TimeInterval {
+    public func reset() -> TimeInterval {
         data = ""
         eventType = ""
         lastEventIdBuffer = nil

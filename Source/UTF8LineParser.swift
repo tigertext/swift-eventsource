@@ -9,7 +9,7 @@ struct DataIter: IteratorProtocol {
     }
 }
 
-class UTF8LineParser {
+public class UTF8LineParser {
     private let lf = Unicode.Scalar(0x0A)
     private let cr = Unicode.Scalar(0x0D)
     private let replacement = String(Unicode.UTF8.decode(Unicode.UTF8.encodedReplacementCharacter))
@@ -19,7 +19,7 @@ class UTF8LineParser {
     var currentString: String = ""
     var seenCr = false
 
-    func append(_ body: Data) -> [String] {
+    public func append(_ body: Data) -> [String] {
         let data = remainder + body
         var dataIter = DataIter(data: data)
         var remainderPos = data.endIndex
@@ -62,7 +62,7 @@ class UTF8LineParser {
         return lines
     }
 
-    func closeAndReset() {
+    public func closeAndReset() {
         seenCr = false
         currentString = ""
         remainder = Data()
