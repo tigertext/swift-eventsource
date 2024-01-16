@@ -9,15 +9,57 @@ struct DataIter: IteratorProtocol {
     }
 }
 
-public class UTF8LineParser {
+@objcMembers public class UTF8LineParser: NSObject {
     private let lf = Unicode.Scalar(0x0A)
     private let cr = Unicode.Scalar(0x0D)
     private let replacement = String(Unicode.UTF8.decode(Unicode.UTF8.encodedReplacementCharacter))
-
+    private let queue = DispatchQueue(label: "UTF8LineParser.private-queue", attributes: .concurrent)
+    private var _remainder: Data = Data()
+    private var _currentString: String = ""
+    private var _seenCr = false
+    
     var utf8Parser = Unicode.UTF8.ForwardParser()
-    var remainder: Data = Data()
-    var currentString: String = ""
-    var seenCr = false
+    var seenCr: Bool {
+        get {
+            var seenCr = false
+            queue.sync {
+                seenCr = _seenCr
+            }
+            return seenCr
+        } set {
+            queue.async(flags: .barrier) {
+                _seenCr = newValue
+            }
+        }
+    }
+
+    var currentString: String {
+        get {
+            var currentString = ""
+            queue.sync { 
+                currentString = _currentString
+            }
+            return currentString
+        } set {
+            queue.async(flags: .barrier) {
+                _currentString = newValue
+            }
+        }
+    }
+    
+    var remainder: Data {
+        get {
+            var remainder = Data()
+            queue.sync { 
+                remainder = _remainder
+            }
+            return remainder
+        } set {
+            queue.async(flags: .barrier) {
+                _remainder = newValue
+            }
+        }
+    }
 
     public func append(_ body: Data) -> [String] {
         let data = remainder + body
